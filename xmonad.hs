@@ -42,7 +42,8 @@ myKeys = [ ((myModMask, xK_a), sendMessage MirrorShrink)
          , ((myModMask, xK_e), viewScreen 1)
          , ((myModMask, xK_o), scratchPad)
          , ((myModMask, xK_u), spawn "/usr/bin/xcalib -i -a")
-         , ((0, xK_Print), spawn "/usr/bin/xcalib -i -a")
+         --, ((0, xK_Print), spawn "/usr/bin/xcalib -i -a")
+         , ((0, xK_Print), spawn "/home/igor/.local/bin/xrandr-invert-colors.bin")
          ]
  where
    scratchPad = scratchpadSpawnActionTerminal myTerminal
@@ -55,7 +56,7 @@ myManageHook = manageDocks <+> manageScratchPad <+> coreManageHook
 coreManageHook :: ManageHook
 coreManageHook = composeAll . concat $
   [ [ className =? c --> doFloat           | c <- myFloats]
-  , [ className =? c --> doF (W.shift "2") | c <- browsers]
+  , [ className =? c --> doF (W.shift "3") | c <- browsers]
   , [ className =? c --> doF (W.shift "4") | c <- docreaders]
   , [ className =? c --> doF (W.shift "5") | c <- dolphin]
   , [ className =? c --> doF (W.shift "8") | c <- messengers]
@@ -72,10 +73,13 @@ coreManageHook = composeAll . concat $
                , "systemsettings"
                , "Systemsettings5"
                , "Yakuake"
+               , "Khelpcenter"
+               , "khelpcenter"
                , "kde5-nm-connection-editor"
+               , "Cantata"
                ]
-    mailApps     = ["Kmail"]
-    browsers     = ["Firefox"]
+    mailApps     = ["Kmail", "Kontact"]
+    browsers     = ["Firefox", "Vivaldi-bin"]
     dolphin      = ["Dolphin"]
     docreaders   = ["Okular"]
     messengers   = ["Skype"]
