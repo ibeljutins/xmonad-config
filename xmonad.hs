@@ -1,4 +1,5 @@
 import Data.Maybe(maybe)
+import qualified Data.Map as M
 import System.Directory
 import System.IO
 import System.Posix.Env(getEnv)
@@ -18,7 +19,10 @@ import XMonad.Layout.ResizableTile
 import XMonad.Layout.SimpleFloat
 import XMonad.Layout.Tabbed
 
+import XMonad.Actions.GridSelect
 import XMonad.Actions.PhysicalScreens
+import XMonad.Actions.Submap
+import XMonad.Actions.UpdatePointer
 
 import XMonad.Hooks.DynamicLog
 import XMonad.Hooks.ManageDocks
@@ -30,20 +34,41 @@ import XMonad.Util.Scratchpad
 
 import qualified XMonad.StackSet as W
 
+
 -- basic configuration
 myModMask     = mod4Mask  -- use the Windows key as mod
 myBorderWidth = 1         -- set window border size
 myTerminal    = "konsole" -- preferred terminal emulator
 
 -- key bindings
-myKeys = [ ((myModMask, xK_a), sendMessage MirrorShrink)
-         , ((myModMask, xK_z), sendMessage MirrorExpand)
-         , ((myModMask, xK_w), viewScreen 0)
-         , ((myModMask, xK_e), viewScreen 1)
+myKeys = [ --((myModMask, xK_s), sendMessage MirrorShrink)
+           --, ((myModMask, xK_z), sendMessage MirrorExpand)
+           ((myModMask, xK_w), viewScreen 0)
+         , ((myModMask, xK_r), viewScreen 1)
+         , ((myModMask, xK_x), viewScreen 2)
          , ((myModMask, xK_o), scratchPad)
-         , ((myModMask, xK_u), spawn "/usr/bin/xcalib -i -a")
-         --, ((0, xK_Print), spawn "/usr/bin/xcalib -i -a")
-         , ((0, xK_Print), spawn "/home/igor/.local/bin/xrandr-invert-colors.bin")
+         , ((myModMask, xK_u), spawn "xrandr-invert-colors -s 0")
+         --, ("S-<Print>", spawn "/usr/bin/xcalib -i -a")
+         --, ((shiftMask, xK_Print), spawn "/usr/bin/xcalib -i -a")
+         , ((0, xK_Print), spawn "xrandr-invert-colors")
+         , ((myModMask, xK_a), submap . M.fromList $
+            [ ((0, xK_n),     spawn "amarok -f")
+            , ((0, xK_p),     spawn "amarok -r")
+            , ((0, xK_space), spawn "amarok -t")
+            ])
+         , ((myModMask, xK_F8), spawn "amixer set Master 6-")
+         , ((myModMask, xK_F9), spawn "amixer set Master 6+")
+         , ((myModMask, xK_g), goToSelected defaultGSConfig)
+         , ((myModMask, xK_s), spawnSelected defaultGSConfig [ "qtcreator"
+                                                             , "systemsettings5"
+                                                             , "vivaldi"
+                                                             , "dolphin"
+                                                             , "kontact"
+                                                             , "davmail"
+                                                             , "plasmashell"
+                                                             , "krdc"
+                                                             , "amarok"
+                                                             ])
          ]
  where
    scratchPad = scratchpadSpawnActionTerminal myTerminal
@@ -66,7 +91,11 @@ coreManageHook = composeAll . concat $
     myFloats = [ "MPlayer"
                , "Gimp"
                , "Plasma-desktop"
+               , "plasma-desktop"
+               , "Plasmashell"
                , "plasmashell"
+               , "Krunner"
+               , "krunner"
                , "KCalc"
                , "Klipper"
                , "Keepassx"
@@ -121,8 +150,10 @@ desktop "xmonad-gnome" = gnomeConfig
 desktop "kde"          = kde4Config
 desktop "kde-plasma"   = kde4Config
 desktop "plasma"       = kde4Config
+desktop "/usr/share/xsessions/plasma" = kde4Config
 desktop "xfce"         = xfceConfig
 desktop _              = desktopConfig
+
 
 --
 -- main function (no configuration stored there)
@@ -140,7 +171,9 @@ main = do
                                          } `additionalKeys` myKeys
   xmobarInstalled <- doesFileExist "/usr/bin/xmobar"
   if session == Just "xmonad" && xmobarInstalled
-    then do runCommand "/bin/bash ~/.xmonad/xprofile"
-            mproc <- spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobar.hs"
-            xmonad $ myDesktopConfig { logHook = myLogHook mproc }
-    else do xmonad myDesktopConfig
+    then do
+      runCommand "/bin/bash ~/.xmonad/xprofile"
+      mproc <- spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobar.hs"
+      xmonad $ myDesktopConfig { logHook = myLogHook mproc }
+    else do
+      xmonad myDesktopConfig { logHook = updatePointer (0.5, 0.5) (0, 0) }

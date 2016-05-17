@@ -1,8 +1,8 @@
  Config {
-     font = "xft:Droid Sans Mono:size=14:bold:antialias=true"
-     bgColor = "#000000",
+     font = "xft:Noto Sans UI:size=10:regular:antialias=true"
+     bgColor = "#333333",
      fgColor = "#ffffff",
-     position = Static { xpos = 0, ypos = 0, width = 3200, height = 32 },
+     position = Static { xpos = 0, ypos = 0, width = 1920, height = 16 },
      lowerOnStart = True,
      commands = [
           Run Weather "UUDD" ["-t","<tempC>°C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
