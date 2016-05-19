@@ -41,9 +41,9 @@ myBorderWidth = 1         -- set window border size
 myTerminal    = "konsole" -- preferred terminal emulator
 
 -- key bindings
-myKeys = [ --((myModMask, xK_s), sendMessage MirrorShrink)
-           --, ((myModMask, xK_z), sendMessage MirrorExpand)
-           ((myModMask, xK_w), viewScreen 0)
+myKeys = [ ((myModMask, xK_z), sendMessage MirrorShrink)               -- Vertical
+         , ((myModMask .|. shiftMask, xK_z), sendMessage MirrorExpand) -- resizing
+         , ((myModMask, xK_w), viewScreen 0)
          , ((myModMask, xK_r), viewScreen 1)
          , ((myModMask, xK_x), viewScreen 2)
          , ((myModMask, xK_o), scratchPad)
@@ -61,7 +61,7 @@ myKeys = [ --((myModMask, xK_s), sendMessage MirrorShrink)
          , ((myModMask, xK_g), goToSelected defaultGSConfig)
          , ((myModMask, xK_s), spawnSelected defaultGSConfig [ "qtcreator"
                                                              , "systemsettings5"
-                                                             , "vivaldi"
+                                                             , "/usr/bin/vivaldi"
                                                              , "dolphin"
                                                              , "kontact"
                                                              , "davmail"
