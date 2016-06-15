@@ -59,7 +59,7 @@ myKeys = [ ((myModMask, xK_z), sendMessage MirrorShrink)               -- Vertic
          , ((myModMask, xK_F8), spawn "amixer set Master 6-")
          , ((myModMask, xK_F9), spawn "amixer set Master 6+")
          , ((myModMask, xK_g), goToSelected defaultGSConfig)
-         , ((myModMask, xK_s), spawnSelected defaultGSConfig [ "qtcreator"
+         , ((myModMask, xK_s), spawnSelected defaultGSConfig [ "/opt/qtcreator/bin/qtcreator"
                                                              , "systemsettings5"
                                                              , "/usr/bin/vivaldi"
                                                              , "dolphin"
